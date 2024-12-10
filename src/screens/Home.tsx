@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 
 export const HomeScreen = ({navigation}: any) => {
@@ -22,7 +22,9 @@ export const HomeScreen = ({navigation}: any) => {
                 </TouchableOpacity>
             </View>
           </View>
+          <ActivityIndicator size="large" color="#00ff00" />
         </View>
+
     );
 };
 
