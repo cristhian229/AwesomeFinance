@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { removeTokenAndUser } from '../services/auth.services';
+import GeneralBalance from '../component/Balance';
 
 
 export const HomeScreen = ({navigation}: any) => {
@@ -22,6 +24,10 @@ export const HomeScreen = ({navigation}: any) => {
                 </TouchableOpacity>
             </View>
           </View>
+          <TouchableOpacity style={styles.button} onPress={removeTokenAndUser}>
+              <Text >Cerrar sesión</Text>
+            </TouchableOpacity>
+            <GeneralBalance totalBudget={350000} totalExpenses={350000} />
           <ActivityIndicator size="large" color="#00ff00" />
         </View>
 

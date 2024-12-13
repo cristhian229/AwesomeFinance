@@ -1,8 +1,40 @@
-import * as React from 'react';
-import {  StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import {  ActivityIndicator, Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { LoginService } from '../services/auth.services';
 
 
 export const LoginScreen = ({navigation}: any) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogin = async () => {
+    if (!email || !password ) {
+      Alert.alert('porfavor completar todos los campos');
+      return;
+    }
+    const loginData = {
+      email,
+      password,
+    };
+    try {
+
+      const response = await LoginService(loginData);
+
+      if (response.statusCode === 201) {
+
+        navigation.navigate('Home');
+      } else {
+
+        Alert.alert('Error', 'Credenciales incorrectas o error en el servidor');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      Alert.alert('Error', 'Hubo un problema al iniciar sesión');
+    }finally{
+      setIsLoading(false);
+    }
+  };
 
 
     return (
@@ -14,22 +46,26 @@ export const LoginScreen = ({navigation}: any) => {
             style={styles.input}
             placeholder="Email"
             keyboardType="email-address"
-            onChangeText={(text) => (text)}
+            onChangeText={(text) => setEmail(text)}
           />
           <TextInput
             style={styles.input}
             placeholder="Contraseña"
             secureTextEntry
-            onChangeText={(text) => (text)}
+            onChangeText={(text) => setPassword(text)}
           />
 
-          <TouchableOpacity style={styles.button} >
-            <Text style={styles.buttonText}>Ingresar</Text>
+          <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={isLoading} >
+          {isLoading ? (
+          <ActivityIndicator size="small" color="#fff" />
+        ) : (
+          <Text style={styles.buttonText}>Ingresar</Text>
+        )}
           </TouchableOpacity>
 
           <View style={styles.registerContainer}>
             <Text style={styles.registerText}>¿No tienes cuenta? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+            <TouchableOpacity onPress={() => navigation.replace('Register')}>
               <Text style={styles.registerLink}>Regístrate</Text>
             </TouchableOpacity>
           </View>
